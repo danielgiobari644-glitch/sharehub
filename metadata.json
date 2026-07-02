@@ -1,0 +1,6 @@
+{
+  "name": "ShareHub",
+  "description": "A modern, secure, real-time file sharing and communication platform featuring instant file sharing, messaging, and nearby device sharing with GeeDrop.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

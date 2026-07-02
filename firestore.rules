@@ -1,0 +1,228 @@
+rules_version = '2';
+service cloudfirestore {
+  match /databases/{database}/documents {
+
+    // Global default-deny
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // --- GLOBAL HELPERS ---
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function existing() {
+      return resource.data;
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    // --- ENTITY VALIDATION BLUEPRINTS ---
+
+    // 1. User Entity Validation
+    function isValidUser(data) {
+      return data.keys().hasAll(['uid', 'displayName', 'username', 'email'])
+        && data.uid is string && data.uid.size() <= 128
+        && data.displayName is string && data.displayName.size() <= 100
+        && data.username is string && data.username.size() <= 50
+        && data.email is string && data.email.size() <= 100
+        && (!('bio' in data) || (data.bio is string && data.bio.size() <= 500))
+        && (!('photoURL' in data) || (data.photoURL is string && data.photoURL.size() <= 1000))
+        && (!('status' in data) || (data.status is string && (data.status == 'online' || data.status == 'offline')))
+        && (!('geedropDiscoverable' in data) || data.geedropDiscoverable is bool)
+        && (!('deviceName' in data) || (data.deviceName is string && data.deviceName.size() <= 100))
+        && (!('deviceType' in data) || (data.deviceType is string && data.deviceType.size() <= 50));
+    }
+
+    // 2. Chat Message Validation
+    function isValidChat(data) {
+      return data.keys().hasAll(['messageId', 'senderId', 'receiverId', 'text', 'timestamp'])
+        && data.messageId is string && data.messageId.size() <= 128
+        && data.senderId is string && data.senderId.size() <= 128
+        && data.receiverId is string && data.receiverId.size() <= 128
+        && data.text is string && data.text.size() <= 1000000 // support large Base64 if embedding file content, but chat text is capped
+        && (!('fileId' in data) || (data.fileId is string && data.fileId.size() <= 128))
+        && (!('read' in data) || data.read is bool)
+        && (!('delivered' in data) || data.delivered is bool)
+        && (!('reaction' in data) || (data.reaction is string && data.reaction.size() <= 10))
+        && (!('replyTo' in data) || (data.replyTo is string && data.replyTo.size() <= 128));
+    }
+
+    // 3. Group Validation
+    function isValidGroup(data) {
+      return data.keys().hasAll(['groupId', 'name', 'createdBy', 'createdAt', 'members', 'admins'])
+        && data.groupId is string && data.groupId.size() <= 128
+        && data.name is string && data.name.size() <= 100
+        && (!('description' in data) || (data.description is string && data.description.size() <= 1000))
+        && (!('photoURL' in data) || (data.photoURL is string && data.photoURL.size() <= 1000))
+        && data.createdBy is string && data.createdBy.size() <= 128
+        && data.members is list && data.members.size() <= 100
+        && data.admins is list && data.admins.size() <= 100;
+    }
+
+    // 4. Group Message Validation
+    function isValidGroupMessage(data) {
+      return data.keys().hasAll(['messageId', 'groupId', 'senderId', 'senderName', 'text', 'timestamp'])
+        && data.messageId is string && data.messageId.size() <= 128
+        && data.groupId is string && data.groupId.size() <= 128
+        && data.senderId is string && data.senderId.size() <= 128
+        && data.senderName is string && data.senderName.size() <= 100
+        && (!('senderPhoto' in data) || (data.senderPhoto is string && data.senderPhoto.size() <= 1000))
+        && data.text is string && data.text.size() <= 10000
+        && (!('fileId' in data) || (data.fileId is string && data.fileId.size() <= 128));
+    }
+
+    // 5. Shared File Validation
+    function isValidFile(data) {
+      return data.keys().hasAll(['fileId', 'name', 'type', 'size', 'senderId', 'receiverId', 'isGroup', 'content', 'createdAt'])
+        && data.fileId is string && data.fileId.size() <= 128
+        && data.name is string && data.name.size() <= 256
+        && data.type is string && data.type.size() <= 100
+        && data.size is int && data.size <= 1000000 // Max 1MB
+        && data.senderId is string && data.senderId.size() <= 128
+        && data.receiverId is string && data.receiverId.size() <= 128
+        && data.isGroup is bool
+        && data.content is string && data.content.size() <= 1100000 // Base64 overhead
+        && (!('pinned' in data) || data.pinned is bool);
+    }
+
+    // 6. GeeDrop Transfer Validation
+    function isValidTransfer(data) {
+      return data.keys().hasAll(['transferId', 'senderId', 'senderName', 'receiverId', 'fileName', 'fileType', 'fileSize', 'fileContent', 'status', 'createdAt'])
+        && data.transferId is string && data.transferId.size() <= 128
+        && data.senderId is string && data.senderId.size() <= 128
+        && data.senderName is string && data.senderName.size() <= 100
+        && data.receiverId is string && data.receiverId.size() <= 128
+        && data.fileName is string && data.fileName.size() <= 256
+        && data.fileType is string && data.fileType.size() <= 100
+        && data.fileSize is int && data.fileSize <= 1000000
+        && data.fileContent is string && data.fileContent.size() <= 1100000
+        && data.status is string && (data.status == 'pending' || data.status == 'accepted' || data.status == 'declined' || data.status == 'completed' || data.failed == 'failed')
+        && (!('deviceName' in data) || (data.deviceName is string && data.deviceName.size() <= 100));
+    }
+
+    // 7. Notification Validation
+    function isValidNotification(data) {
+      return data.keys().hasAll(['notificationId', 'userId', 'title', 'body', 'type', 'read', 'createdAt'])
+        && data.notificationId is string && data.notificationId.size() <= 128
+        && data.userId is string && data.userId.size() <= 128
+        && data.title is string && data.title.size() <= 100
+        && data.body is string && data.body.size() <= 500
+        && data.type is string && (data.type == 'message' || data.type == 'group_invite' || data.type == 'geedrop' || data.type == 'system')
+        && (!('relatedId' in data) || (data.relatedId is string && data.relatedId.size() <= 128))
+        && data.read is bool;
+    }
+
+
+    // --- RULES FOR COLLECTIONS ---
+
+    // 1. Users Collection
+    match /users/{userId} {
+      allow read: if isSignedIn();
+      allow create: if isOwner(userId) && isValidId(userId) && isValidUser(incoming()) && incoming().joinedAt == request.time;
+      allow update: if isOwner(userId) && isValidUser(incoming()) && (
+        incoming().diff(existing()).affectedKeys().hasOnly(['displayName', 'username', 'bio', 'photoURL', 'status', 'lastSeen', 'geedropDiscoverable', 'deviceName', 'deviceType'])
+      );
+      allow delete: if false;
+    }
+
+    // 2. Chats Collection
+    match /chats/{chatId} {
+      allow read: if isSignedIn() && (existing().senderId == request.auth.uid || existing().receiverId == request.auth.uid);
+      allow create: if isSignedIn() && isValidId(chatId) && isValidChat(incoming()) && incoming().senderId == request.auth.uid && incoming().timestamp == request.time;
+      allow update: if isSignedIn() && (
+        // Either sender or receiver can update read/delivered status or reactions
+        (existing().senderId == request.auth.uid || existing().receiverId == request.auth.uid)
+        && isValidChat(incoming())
+        && incoming().diff(existing()).affectedKeys().hasAny(['read', 'delivered', 'reaction'])
+      );
+      allow delete: if isSignedIn() && existing().senderId == request.auth.uid;
+    }
+
+    // 3. Groups Collection
+    match /groups/{groupId} {
+      allow read: if isSignedIn(); // Let any signed-in user search groups or see info
+      allow create: if isSignedIn() && isValidId(groupId) && isValidGroup(incoming()) && incoming().createdBy == request.auth.uid && incoming().createdAt == request.time;
+      allow update: if isSignedIn() && isValidGroup(incoming()) && (
+        // Creator/admin can update metadata
+        (request.auth.uid in existing().admins || existing().createdBy == request.auth.uid)
+        ||
+        // Members list can be updated when a member joins/leaves
+        (incoming().diff(existing()).affectedKeys().hasOnly(['members']) && (
+          // Joining yourself
+          (request.auth.uid in incoming().members && !(request.auth.uid in existing().members)) ||
+          // Leaving yourself
+          (!(request.auth.uid in incoming().members) && request.auth.uid in existing().members)
+        ))
+      );
+      allow delete: if isSignedIn() && existing().createdBy == request.auth.uid;
+    }
+
+    // 4. Group Messages Collection
+    match /groupMessages/{msgId} {
+      // Allow reading if the user is a member of the group
+      allow read: if isSignedIn() && (
+        get(/databases/$(database)/documents/groups/$(existing().groupId)).data.members.hasAny([request.auth.uid])
+      );
+      allow create: if isSignedIn() && isValidId(msgId) && isValidGroupMessage(incoming()) 
+        && incoming().senderId == request.auth.uid 
+        && incoming().timestamp == request.time
+        && get(/databases/$(database)/documents/groups/$(incoming().groupId)).data.members.hasAny([request.auth.uid]);
+      allow update: if false; // Group messages are immutable once sent
+      allow delete: if isSignedIn() && existing().senderId == request.auth.uid;
+    }
+
+    // 5. Files Collection
+    match /files/{fileId} {
+      allow read: if isSignedIn() && (
+        existing().senderId == request.auth.uid || 
+        (!existing().isGroup && existing().receiverId == request.auth.uid) ||
+        (existing().isGroup && get(/databases/$(database)/documents/groups/$(existing().receiverId)).data.members.hasAny([request.auth.uid]))
+      );
+      allow create: if isSignedIn() && isValidId(fileId) && isValidFile(incoming()) 
+        && incoming().senderId == request.auth.uid 
+        && incoming().createdAt == request.time;
+      allow update: if isSignedIn() && (
+        // Allow pinning/unpinning or editing metadata
+        (existing().senderId == request.auth.uid)
+        && isValidFile(incoming())
+        && incoming().diff(existing()).affectedKeys().hasOnly(['pinned'])
+      );
+      allow delete: if isSignedIn() && existing().senderId == request.auth.uid;
+    }
+
+    // 6. Transfers Collection (GeeDrop)
+    match /transfers/{transferId} {
+      allow read: if isSignedIn() && (existing().senderId == request.auth.uid || existing().receiverId == request.auth.uid);
+      allow create: if isSignedIn() && isValidId(transferId) && isValidTransfer(incoming()) 
+        && incoming().senderId == request.auth.uid 
+        && incoming().createdAt == request.time;
+      allow update: if isSignedIn() && (
+        // Receiver can accept/decline, sender can mark as completed/failed
+        (existing().senderId == request.auth.uid || existing().receiverId == request.auth.uid)
+        && isValidTransfer(incoming())
+        && incoming().diff(existing()).affectedKeys().hasOnly(['status'])
+      );
+      allow delete: if isSignedIn() && (existing().senderId == request.auth.uid || existing().receiverId == request.auth.uid);
+    }
+
+    // 7. Notifications Collection
+    match /notifications/{notifId} {
+      allow read: if isSignedIn() && existing().userId == request.auth.uid;
+      allow create: if isSignedIn() && isValidId(notifId) && isValidNotification(incoming()) && incoming().createdAt == request.time;
+      allow update: if isSignedIn() && isOwner(existing().userId) && isValidNotification(incoming()) && incoming().diff(existing()).affectedKeys().hasOnly(['read']);
+      allow delete: if isSignedIn() && isOwner(existing().userId);
+    }
+  }
+}

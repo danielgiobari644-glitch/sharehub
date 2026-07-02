@@ -1,0 +1,155 @@
+{
+  "entities": {
+    "User": {
+      "title": "User Profile",
+      "description": "User account and profile details with presence tracking",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string", "description": "Unique user ID" },
+        "displayName": { "type": "string", "description": "Display name" },
+        "username": { "type": "string", "description": "Unique username" },
+        "email": { "type": "string", "description": "Email address" },
+        "bio": { "type": "string", "description": "Biography" },
+        "photoURL": { "type": "string", "description": "Profile picture URL" },
+        "joinedAt": { "type": "string", "format": "date-time", "description": "Account creation timestamp" },
+        "status": { "type": "string", "enum": ["online", "offline"], "description": "Presence status" },
+        "lastSeen": { "type": "string", "format": "date-time", "description": "Last active timestamp" },
+        "geedropDiscoverable": { "type": "boolean", "description": "Whether device is discoverable via GeeDrop" },
+        "deviceName": { "type": "string", "description": "Device hostname/name" },
+        "deviceType": { "type": "string", "description": "Device form factor" }
+      },
+      "required": ["uid", "displayName", "username", "email"]
+    },
+    "Chat": {
+      "title": "Private Chat Message",
+      "description": "A direct message between two users",
+      "type": "object",
+      "properties": {
+        "messageId": { "type": "string", "description": "Message ID" },
+        "senderId": { "type": "string", "description": "Sender user ID" },
+        "receiverId": { "type": "string", "description": "Receiver user ID" },
+        "text": { "type": "string", "description": "Message content" },
+        "fileId": { "type": "string", "description": "Optional shared file reference" },
+        "timestamp": { "type": "string", "format": "date-time", "description": "Time sent" },
+        "read": { "type": "boolean", "description": "Whether message has been read" },
+        "delivered": { "type": "boolean", "description": "Whether message was delivered" },
+        "reaction": { "type": "string", "description": "Emoji reaction string" },
+        "replyTo": { "type": "string", "description": "Optional parent message ID for replies" }
+      },
+      "required": ["messageId", "senderId", "receiverId", "text", "timestamp"]
+    },
+    "Group": {
+      "title": "Group Chat",
+      "description": "Metadata for group conversations",
+      "type": "object",
+      "properties": {
+        "groupId": { "type": "string", "description": "Group ID" },
+        "name": { "type": "string", "description": "Group name" },
+        "description": { "type": "string", "description": "Group description" },
+        "photoURL": { "type": "string", "description": "Group photo URL" },
+        "createdBy": { "type": "string", "description": "Creator user ID" },
+        "createdAt": { "type": "string", "format": "date-time", "description": "Group creation timestamp" }
+      },
+      "required": ["groupId", "name", "createdBy", "createdAt"]
+    },
+    "GroupMessage": {
+      "title": "Group Message",
+      "description": "A message sent inside a group",
+      "type": "object",
+      "properties": {
+        "messageId": { "type": "string", "description": "Message ID" },
+        "groupId": { "type": "string", "description": "Group ID" },
+        "senderId": { "type": "string", "description": "Sender user ID" },
+        "senderName": { "type": "string", "description": "Sender display name" },
+        "senderPhoto": { "type": "string", "description": "Sender avatar URL" },
+        "text": { "type": "string", "description": "Message content" },
+        "fileId": { "type": "string", "description": "Optional shared file reference" },
+        "timestamp": { "type": "string", "format": "date-time", "description": "Time sent" }
+      },
+      "required": ["messageId", "groupId", "senderId", "text", "timestamp"]
+    },
+    "File": {
+      "title": "Shared File",
+      "description": "A file shared in a direct chat or group",
+      "type": "object",
+      "properties": {
+        "fileId": { "type": "string", "description": "File ID" },
+        "name": { "type": "string", "description": "File name" },
+        "type": { "type": "string", "description": "File mime type" },
+        "size": { "type": "integer", "description": "File size in bytes" },
+        "senderId": { "type": "string", "description": "Sender user ID" },
+        "senderName": { "type": "string", "description": "Sender display name" },
+        "receiverId": { "type": "string", "description": "Receiver ID (User or Group)" },
+        "isGroup": { "type": "boolean", "description": "Whether receiver is a group" },
+        "content": { "type": "string", "description": "Base64 file data content" },
+        "createdAt": { "type": "string", "format": "date-time", "description": "Upload timestamp" },
+        "pinned": { "type": "boolean", "description": "Whether file is pinned" }
+      },
+      "required": ["fileId", "name", "type", "size", "senderId", "receiverId", "isGroup", "content", "createdAt"]
+    },
+    "Transfer": {
+      "title": "GeeDrop Transfer",
+      "description": "GeeDrop nearby device file transfer session",
+      "type": "object",
+      "properties": {
+        "transferId": { "type": "string", "description": "Transfer request ID" },
+        "senderId": { "type": "string", "description": "Sender user ID" },
+        "senderName": { "type": "string", "description": "Sender display name" },
+        "receiverId": { "type": "string", "description": "Receiver user ID" },
+        "fileName": { "type": "string", "description": "File name" },
+        "fileType": { "type": "string", "description": "File mime type" },
+        "fileSize": { "type": "integer", "description": "File size in bytes" },
+        "fileContent": { "type": "string", "description": "Base64 encoded file content" },
+        "status": { "type": "string", "enum": ["pending", "accepted", "declined", "completed", "failed"], "description": "Transfer status" },
+        "createdAt": { "type": "string", "format": "date-time", "description": "Request timestamp" }
+      },
+      "required": ["transferId", "senderId", "receiverId", "fileName", "fileType", "fileSize", "fileContent", "status", "createdAt"]
+    },
+    "Notification": {
+      "title": "Notification Alert",
+      "description": "Real-time notification for messages or requests",
+      "type": "object",
+      "properties": {
+        "notificationId": { "type": "string", "description": "Notification ID" },
+        "userId": { "type": "string", "description": "Receiver user ID" },
+        "title": { "type": "string", "description": "Notification title" },
+        "body": { "type": "string", "description": "Notification message" },
+        "type": { "type": "string", "enum": ["message", "group_invite", "geedrop", "system"], "description": "Notification type" },
+        "relatedId": { "type": "string", "description": "ID of related chat, group, or transfer" },
+        "read": { "type": "boolean", "description": "Read status" },
+        "createdAt": { "type": "string", "format": "date-time", "description": "Notification timestamp" }
+      },
+      "required": ["notificationId", "userId", "title", "body", "type", "read", "createdAt"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "User",
+      "description": "User profiles and online presence"
+    },
+    "/chats/{chatId}": {
+      "schema": "Chat",
+      "description": "Private message documents"
+    },
+    "/groups/{groupId}": {
+      "schema": "Group",
+      "description": "Group metadata and active members"
+    },
+    "/groupMessages/{msgId}": {
+      "schema": "GroupMessage",
+      "description": "Messages inside groups"
+    },
+    "/files/{fileId}": {
+      "schema": "File",
+      "description": "Shared file records storing content in Base64"
+    },
+    "/transfers/{transferId}": {
+      "schema": "Transfer",
+      "description": "GeeDrop nearby transfers"
+    },
+    "/notifications/{notifId}": {
+      "schema": "Notification",
+      "description": "Real-time notification system documents"
+    }
+  }
+}

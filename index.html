@@ -1,0 +1,1225 @@
+<!doctype html>
+<html lang="en" class="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ShareHub – Real-Time File Sharing & Communication</title>
+  </head>
+  <body class="bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100 font-sans min-h-screen transition-colors duration-200">
+    
+    <!-- APP ROOT CONTAINER -->
+    <div id="app" class="relative min-h-screen flex flex-col">
+      
+      <!-- LOADING COVER -->
+      <div id="loading-screen" class="fixed inset-0 z-50 bg-slate-950 flex flex-col items-center justify-center space-y-4">
+        <div class="relative w-16 h-16">
+          <div class="absolute inset-0 rounded-full border-4 border-emerald-500/20"></div>
+          <div class="absolute inset-0 rounded-full border-4 border-emerald-500 border-t-transparent animate-spin"></div>
+        </div>
+        <h1 class="font-display text-2xl font-bold tracking-wider text-emerald-400">ShareHub</h1>
+        <p class="font-mono text-xs text-slate-500 animate-pulse">Initializing Firebase engine...</p>
+      </div>
+
+      <!-- TOAST NOTIFICATION CONTAINER -->
+      <div id="toast-container" class="fixed bottom-4 right-4 z-50 flex flex-col space-y-2 pointer-events-none max-w-sm w-full"></div>
+
+      <!-- APP PORTFOLIO / LANDING PAGE -->
+      <div id="portfolio-landing" class="hidden flex-1 flex flex-col min-h-screen">
+        <!-- TOP NAVBAR -->
+        <header class="sticky top-0 z-35 w-full border-b border-slate-200/50 dark:border-slate-800/50 bg-white/80 dark:bg-slate-950/80 backdrop-blur-md select-none transition-colors duration-200">
+          <div class="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+              <div class="p-2 bg-emerald-500/10 text-emerald-500 rounded-xl">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-share-2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+              </div>
+              <span class="font-display font-bold text-lg tracking-tight text-slate-800 dark:text-white">ShareHub</span>
+            </div>
+            
+            <nav class="hidden md:flex items-center space-x-8">
+              <a href="#features-section" class="text-[11px] font-bold uppercase tracking-wider text-slate-500 hover:text-slate-800 dark:hover:text-slate-200 transition-colors">Features</a>
+              <a href="#demo-section" class="text-[11px] font-bold uppercase tracking-wider text-slate-500 hover:text-slate-800 dark:hover:text-slate-200 transition-colors">Live Demo Grid</a>
+              <a href="#specs-section" class="text-[11px] font-bold uppercase tracking-wider text-slate-500 hover:text-slate-800 dark:hover:text-slate-200 transition-colors">Tech Specs</a>
+              <a href="#status-section" class="text-[11px] font-bold uppercase tracking-wider text-slate-500 hover:text-slate-800 dark:hover:text-slate-200 transition-colors">Network Status</a>
+            </nav>
+            
+            <div class="flex items-center space-x-3">
+              <!-- Dark Mode Toggle inside Showcase navbar -->
+              <button id="btn-theme-toggle-portfolio" class="p-2 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-900 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 transition-all cursor-pointer">
+                <!-- Sun Icon -->
+                <svg id="theme-sun-icon-portfolio" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-sun hidden"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
+                <!-- Moon Icon -->
+                <svg id="theme-moon-icon-portfolio" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-moon"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+              </button>
+              
+              <button class="btn-launch-terminal px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white font-medium rounded-xl text-xs tracking-wide transition-all duration-200 shadow-md shadow-emerald-600/10 active:scale-95 cursor-pointer">
+                Launch App
+              </button>
+            </div>
+          </div>
+        </header>
+
+        <!-- HERO SECTION -->
+        <section class="relative py-16 md:py-24 px-6 overflow-hidden border-b border-slate-150 dark:border-slate-900/50 bg-slate-50/30 dark:bg-slate-950/20">
+          <!-- Floating ambient background orbs -->
+          <div class="absolute top-1/4 left-1/10 w-96 h-96 bg-emerald-500/10 dark:bg-emerald-500/5 rounded-full blur-3xl pointer-events-none"></div>
+          <div class="absolute bottom-1/4 right-1/10 w-96 h-96 bg-teal-500/10 dark:bg-teal-500/5 rounded-full blur-3xl pointer-events-none"></div>
+
+          <div class="max-w-7xl mx-auto flex flex-col lg:flex-row items-center gap-12 relative z-10">
+            <!-- Hero Text Column -->
+            <div class="flex-1 space-y-6 text-left">
+              <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
+                <span class="flex h-2 w-2 relative">
+                  <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                  <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                </span>
+                <span>ShareHub Terminal Node v1.4.0 Live</span>
+              </div>
+              
+              <h1 class="font-display text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-slate-900 dark:text-white leading-tight">
+                Decentralized Sharing.<br>
+                <span class="text-transparent bg-clip-text bg-gradient-to-r from-emerald-500 to-teal-400">Absolute Speed.</span>
+              </h1>
+              
+              <p class="text-sm text-slate-600 dark:text-slate-400 max-w-xl leading-relaxed">
+                ShareHub is a premium, secure file sharing & real-time messaging workspace built with zero friction. Connect your device to our distributed cluster to drop files locally via GeeDrop, open secure direct messaging tunnels, and collaborate in real-time group chats.
+              </p>
+              
+              <div class="flex flex-wrap gap-4 pt-2">
+                <button class="btn-launch-terminal px-6 py-3.5 bg-emerald-600 hover:bg-emerald-500 text-white font-semibold rounded-xl text-sm transition-all duration-200 shadow-xl shadow-emerald-600/15 hover:shadow-emerald-500/25 active:scale-95 cursor-pointer flex items-center space-x-2">
+                  <span>Enter Hub Terminal</span>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-right"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                </button>
+                <a href="#features-section" class="px-6 py-3.5 bg-slate-100 hover:bg-slate-200 dark:bg-slate-900 dark:hover:bg-slate-800 text-slate-800 dark:text-slate-200 font-semibold rounded-xl text-sm transition-all duration-200 cursor-pointer flex items-center space-x-2 border border-slate-200 dark:border-slate-850">
+                  <span>Explore Core Features</span>
+                </a>
+              </div>
+            </div>
+            
+            <!-- Hero Interactive Simulation Mockup -->
+            <div class="flex-1 w-full max-w-lg" id="demo-section">
+              <div class="glass rounded-2xl border border-slate-200 dark:border-slate-850 shadow-2xl p-6 flex flex-col h-[400px] relative overflow-hidden transition-all duration-300 hover:border-slate-300 dark:hover:border-slate-800">
+                <div class="absolute inset-0 bg-gradient-to-tr from-slate-950/10 to-slate-950/0 pointer-events-none"></div>
+                
+                <!-- Mockup Header -->
+                <div class="flex items-center justify-between pb-4 border-b border-slate-200/50 dark:border-slate-800/50">
+                  <div class="flex items-center space-x-2">
+                    <span class="w-3 h-3 rounded-full bg-rose-500/80"></span>
+                    <span class="w-3 h-3 rounded-full bg-amber-500/80"></span>
+                    <span class="w-3 h-3 rounded-full bg-emerald-500/80"></span>
+                  </div>
+                  <div class="px-3 py-1 bg-slate-100 dark:bg-slate-900 rounded-lg text-[10px] font-mono text-slate-400 flex items-center gap-1.5 border border-slate-200 dark:border-slate-800/80">
+                    <span class="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-ping"></span>
+                    geedrop-sandbox-node-1
+                  </div>
+                </div>
+                
+                <!-- Mockup Body / Simulated Device -->
+                <div class="flex-1 flex flex-col justify-between pt-4 space-y-4">
+                  <div class="text-center space-y-1">
+                    <h4 class="text-xs font-bold font-display text-slate-800 dark:text-slate-200">Interactive GeeDrop Stream Simulator</h4>
+                    <p class="text-[10px] text-slate-400 dark:text-slate-500">Test local Base64 chunk-piping and proximity telemetry below.</p>
+                  </div>
+                  
+                  <!-- Interactive Action Zone -->
+                  <div id="sim-interactive-zone" class="flex-1 border-2 border-dashed border-slate-200 dark:border-slate-800/80 rounded-xl hover:border-emerald-500/50 transition-all flex flex-col items-center justify-center p-4 text-center cursor-pointer relative group bg-slate-50/50 dark:bg-slate-950/40">
+                    
+                    <!-- Idle State -->
+                    <div class="space-y-2 group-hover:scale-103 transition-transform duration-200 flex flex-col items-center" id="sim-idle-state">
+                      <div class="p-3 bg-emerald-500/10 text-emerald-500 rounded-full">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-radio"><circle cx="12" cy="12" r="2"/><path d="M16.24 7.76a6 6 0 0 1 0 8.49"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/><path d="M7.76 16.24a6 6 0 0 1 0-8.49"/><path d="M4.93 19.07a10 10 0 0 1 0-14.14"/></svg>
+                      </div>
+                      <span class="text-xs font-bold text-slate-700 dark:text-slate-300">Click to connect simulated node</span>
+                      <p class="text-[10px] text-slate-400 dark:text-slate-500 max-w-[240px]">This will register a temporary local client peer on your screen</p>
+                    </div>
+                    
+                    <!-- Connected State (hidden initially) -->
+                    <div id="sim-connected-state" class="hidden w-full h-full flex flex-col justify-between p-2">
+                      <div class="flex items-center justify-between p-2.5 bg-emerald-500/5 dark:bg-emerald-500/10 border border-emerald-500/20 rounded-xl">
+                        <div class="flex items-center space-x-2">
+                          <img src="https://api.dicebear.com/7.x/bottts/svg?seed=nexus7" class="w-6 h-6 rounded-lg bg-slate-100 dark:bg-slate-800 shrink-0">
+                          <div class="text-left">
+                            <span class="text-[10px] font-bold block leading-none text-slate-800 dark:text-slate-200">Nexus-7 (Virtual)</span>
+                            <span class="text-[8px] font-mono text-emerald-500 leading-none">Connected • Proximity Map</span>
+                          </div>
+                        </div>
+                        <span class="text-[8px] font-mono px-1.5 py-0.5 bg-emerald-500/20 text-emerald-500 dark:text-emerald-400 rounded">Radar Link</span>
+                      </div>
+                      
+                      <div class="py-2 flex flex-col items-center justify-center space-y-1.5 flex-1">
+                        <!-- Drop target or trigger simulation -->
+                        <button id="btn-sim-trigger-drop" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 dark:bg-slate-900 dark:hover:bg-slate-800 border border-slate-200 dark:border-slate-800 rounded-lg text-[10px] font-bold tracking-wider uppercase cursor-pointer transition-colors text-slate-700 dark:text-slate-300">
+                          Simulate Drop File
+                        </button>
+                        <p class="text-[9px] text-slate-400 dark:text-slate-500">Simulates sending "presentation_deck.pdf" (640KB)</p>
+                      </div>
+                    </div>
+
+                    <!-- Transfer Progress State (hidden initially) -->
+                    <div id="sim-transfer-state" class="hidden w-full h-full flex flex-col justify-center items-center space-y-4 p-4">
+                      <div class="flex items-center justify-between w-full">
+                        <div class="flex items-center space-x-2">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="text-emerald-500"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/></svg>
+                          <div class="text-left">
+                            <span class="text-[10px] font-bold block truncate leading-none text-slate-800 dark:text-slate-200">presentation_deck.pdf</span>
+                            <span class="text-[8px] font-mono text-slate-400 mt-1 block">640 KB • Base64 Chunking</span>
+                          </div>
+                        </div>
+                        <span class="text-[10px] font-mono font-bold text-emerald-500" id="sim-progress-text">0%</span>
+                      </div>
+                      
+                      <!-- Progress Bar -->
+                      <div class="w-full bg-slate-200 dark:bg-slate-800 h-1.5 rounded-full overflow-hidden">
+                        <div class="bg-emerald-500 h-full w-0 transition-all duration-100" id="sim-progress-bar"></div>
+                      </div>
+                      
+                      <div class="flex justify-between items-center w-full text-[8px] font-mono text-slate-400">
+                        <span>Rate: 4.8 MB/s</span>
+                        <span>Link: Secure SSL/Base64</span>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <!-- Mockup Stats Footer -->
+                  <div class="flex items-center justify-between text-[10px] font-mono text-slate-400 pt-2 border-t border-slate-200/50 dark:border-slate-800/50 select-none">
+                    <span id="sim-link-latency">Latency: -- ms</span>
+                    <span class="flex items-center gap-1">
+                      <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                      Channel Stable
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- BENTO BOX FEATURES -->
+        <section id="features-section" class="py-20 px-6 max-w-7xl mx-auto border-b border-slate-150 dark:border-slate-900/50 select-none">
+          <div class="text-center space-y-4 mb-16">
+            <h2 class="font-display text-3xl sm:text-4xl font-bold tracking-tight text-slate-900 dark:text-white">
+              Architected for High-Performance Sharing
+            </h2>
+            <p class="text-xs text-slate-500 dark:text-slate-400 max-w-xl mx-auto">
+              ShareHub merges local peer discovery with high-speed document indexing to create the ultimate productivity playground.
+            </p>
+          </div>
+          
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <!-- Card 1: GeeDrop Radar (Wide Column) -->
+            <div class="md:col-span-2 group relative overflow-hidden rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/40 p-6 md:p-8 hover:shadow-xl dark:hover:shadow-slate-950/20 transition-all duration-300">
+              <!-- Background element -->
+              <div class="absolute -right-20 -bottom-20 w-80 h-80 bg-emerald-500/5 rounded-full blur-3xl group-hover:bg-emerald-500/10 transition-all pointer-events-none"></div>
+              
+              <div class="flex flex-col md:flex-row items-center gap-8">
+                <div class="flex-1 space-y-4 text-left">
+                  <div class="inline-flex p-3 bg-emerald-500/10 text-emerald-500 rounded-xl">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-radio"><circle cx="12" cy="12" r="2"/><path d="M16.24 7.76a6 6 0 0 1 0 8.49"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/><path d="M7.76 16.24a6 6 0 0 1 0-8.49"/><path d="M4.93 19.07a10 10 0 0 1 0-14.14"/></svg>
+                  </div>
+                  <h3 class="font-display text-xl font-bold text-slate-900 dark:text-white">Proximity-Based GeeDrop Radar</h3>
+                  <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
+                    Toggle your node visibility to enter discoverable mode instantly. Find and share files up to 800KB with nearby peer terminals directly through high-speed Base64 buffer-piping.
+                  </p>
+                  <ul class="space-y-2 text-xs text-slate-600 dark:text-slate-400">
+                    <li class="flex items-center gap-2">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="text-emerald-500"><polyline points="20 6 9 17 4 12"/></svg>
+                      Automatic client discovery bounds
+                    </li>
+                    <li class="flex items-center gap-2">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="text-emerald-500"><polyline points="20 6 9 17 4 12"/></svg>
+                      Real-time download consent queries
+                    </li>
+                  </ul>
+                </div>
+                
+                <!-- Graphic: Radar sweep mockup -->
+                <div class="relative w-44 h-44 border border-slate-200 dark:border-slate-800 rounded-full flex items-center justify-center overflow-hidden shrink-0">
+                  <!-- Outer circular sweep border -->
+                  <div class="absolute inset-0 border border-slate-150 dark:border-slate-850 rounded-full scale-75"></div>
+                  <div class="absolute inset-0 border border-slate-150 dark:border-slate-850 rounded-full scale-50"></div>
+                  <!-- Sweeping glow -->
+                  <div class="absolute inset-0 bg-gradient-to-tr from-emerald-500/10 to-transparent rounded-full animate-spin" style="animation-duration: 4s;"></div>
+                  <!-- Core anchor -->
+                  <div class="w-4 h-4 rounded-full bg-emerald-500 flex items-center justify-center relative z-10 shadow-lg shadow-emerald-500/20">
+                    <span class="w-2 h-2 rounded-full bg-white animate-pulse"></span>
+                  </div>
+                  <!-- Scattered nodes -->
+                  <div class="absolute top-8 left-12 w-2 h-2 bg-emerald-400 rounded-full animate-ping z-10" style="animation-duration: 2.5s;"></div>
+                  <div class="absolute top-8 left-12 w-2.5 h-2.5 bg-emerald-500 rounded-full border border-white dark:border-slate-900 z-10"></div>
+                  <div class="absolute bottom-10 right-8 w-2 h-2 bg-emerald-500 rounded-full border border-white dark:border-slate-900 z-10 animate-pulse"></div>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Card 2: Secured Direct Messaging Tunnel -->
+            <div class="group relative overflow-hidden rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/40 p-6 md:p-8 hover:shadow-xl dark:hover:shadow-slate-950/20 transition-all duration-300 flex flex-col justify-between">
+              <div class="absolute -right-16 -bottom-16 w-48 h-48 bg-teal-500/5 rounded-full blur-2xl group-hover:bg-teal-500/10 transition-all pointer-events-none"></div>
+              
+              <div class="space-y-4">
+                <div class="inline-flex p-3 bg-teal-500/10 text-teal-500 rounded-xl">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                </div>
+                <h3 class="font-display text-lg font-bold text-slate-900 dark:text-white">Secure Private Messaging</h3>
+                <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
+                  Connect peer-to-peer. Enjoy direct messaging with instant typing states, read receipts, emoji reactions, and in-chat direct file compilation.
+                </p>
+              </div>
+              
+              <div class="pt-6 border-t border-slate-100 dark:border-slate-800/50 mt-4 flex items-center justify-between text-[10px] font-mono text-slate-400">
+                <span>Syncing: Firestore Rules</span>
+                <span>Encrypted</span>
+              </div>
+            </div>
+
+            <!-- Card 3: Group Workspaces & Pinboard -->
+            <div class="group relative overflow-hidden rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/40 p-6 md:p-8 hover:shadow-xl dark:hover:shadow-slate-950/20 transition-all duration-300 flex flex-col justify-between">
+              <div class="absolute -right-16 -bottom-16 w-48 h-48 bg-emerald-500/5 rounded-full blur-2xl group-hover:bg-emerald-500/10 transition-all pointer-events-none"></div>
+              
+              <div class="space-y-4">
+                <div class="inline-flex p-3 bg-emerald-500/10 text-emerald-500 rounded-xl">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-users"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                </div>
+                <h3 class="font-display text-lg font-bold text-slate-900 dark:text-white">Channel Workspaces</h3>
+                <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
+                  Form persistent group spaces, announce events, publish code, and build a digital shared repository with automated file pinning.
+                </p>
+              </div>
+              
+              <div class="pt-6 border-t border-slate-100 dark:border-slate-800/50 mt-4 flex items-center justify-between text-[10px] font-mono text-slate-400">
+                <span>Capacity: Unlimited Peers</span>
+                <span>Workspace Sync</span>
+              </div>
+            </div>
+
+            <!-- Card 4: Light-weight Node Storage -->
+            <div class="group relative overflow-hidden rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/40 p-6 md:p-8 hover:shadow-xl dark:hover:shadow-slate-950/20 transition-all duration-300 flex flex-col justify-between">
+              <div class="absolute -right-16 -bottom-16 w-48 h-48 bg-teal-500/5 rounded-full blur-2xl group-hover:bg-teal-500/10 transition-all pointer-events-none"></div>
+              
+              <div class="space-y-4">
+                <div class="inline-flex p-3 bg-teal-500/10 text-teal-500 rounded-xl">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="lucide lucide-file-text"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/></svg>
+                </div>
+                <h3 class="font-display text-lg font-bold text-slate-900 dark:text-white">Zero-Config Repositories</h3>
+                <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
+                  Filter, search, sort, and download document buffers using our quick indices. Securely purge file payloads at any time with full deletion rights.
+                </p>
+              </div>
+              
+              <div class="pt-6 border-t border-slate-100 dark:border-slate-800/50 mt-4 flex items-center justify-between text-[10px] font-mono text-slate-400">
+                <span>Cap: 800 KB per stream</span>
+                <span>Fast Purge</span>
+              </div>
+            </div>
+
+            <!-- Card 5: Customizable Avatar Badges -->
+            <div class="group relative overflow-hidden rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/40 p-6 md:p-8 hover:shadow-xl dark:hover:shadow-slate-950/20 transition-all duration-300 flex flex-col justify-between">
+              <div class="absolute -right-16 -bottom-16 w-48 h-48 bg-emerald-500/5 rounded-full blur-2xl group-hover:bg-emerald-500/10 transition-all pointer-events-none"></div>
+              
+              <div class="space-y-4">
+                <div class="inline-flex p-3 bg-emerald-500/10 text-emerald-500 rounded-xl">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-user"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                </div>
+                <h3 class="font-display text-lg font-bold text-slate-900 dark:text-white">Digital Node Identity</h3>
+                <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
+                  Personalize your node. Select custom DiceBear robot seed tags, configure device descriptors (type, hostname), and edit active bios instantly.
+                </p>
+              </div>
+              
+              <div class="pt-6 border-t border-slate-100 dark:border-slate-800/50 mt-4 flex items-center justify-between text-[10px] font-mono text-slate-400">
+                <span>Seed: DiceBear Bottts</span>
+                <span>Profile Customizer</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- TECHNICAL SPECIFICATIONS / LIVE TELEMETRY LOGS -->
+        <section id="specs-section" class="py-20 px-6 max-w-7xl mx-auto border-b border-slate-150 dark:border-slate-900/50 select-none">
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center text-left">
+            <div class="space-y-6">
+              <h2 class="font-display text-3xl sm:text-4xl font-bold tracking-tight text-slate-900 dark:text-white">
+                Lightweight, serverless cluster architecture
+              </h2>
+              <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+                ShareHub runs directly in your sandbox using the Google Firestore database as a persistent, secure data coordinator. Conversations, documents, and notifications are synchronized instantly without requiring intermediate caching proxy servers.
+              </p>
+              <div class="grid grid-cols-2 gap-6">
+                <div class="p-4 bg-slate-50 dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800/80">
+                  <span class="font-mono text-[9px] text-slate-400 dark:text-slate-500 uppercase tracking-wider font-semibold">Transmission Rate</span>
+                  <p class="font-display text-xl font-bold text-emerald-500 mt-1">Base64 Link</p>
+                  <p class="text-[9px] text-slate-400 dark:text-slate-500 mt-1">Chunk-level encoding</p>
+                </div>
+                <div class="p-4 bg-slate-50 dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800/80">
+                  <span class="font-mono text-[9px] text-slate-400 dark:text-slate-500 uppercase tracking-wider font-semibold">Access Controls</span>
+                  <p class="font-display text-xl font-bold text-emerald-500 mt-1">Secured Rules</p>
+                  <p class="text-[9px] text-slate-400 dark:text-slate-500 mt-1">Attribute isolated</p>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Terminal logs window -->
+            <div class="glass border border-slate-200 dark:border-slate-800 rounded-2xl shadow-xl p-5 h-72 flex flex-col font-mono text-[11px] leading-relaxed relative overflow-hidden text-slate-600 dark:text-slate-400">
+              <div class="flex items-center justify-between pb-3 border-b border-slate-200/50 dark:border-slate-800/50 mb-3 text-slate-400 select-none shrink-0">
+                <div class="flex items-center space-x-1.5">
+                  <span class="w-2.5 h-2.5 rounded-full bg-slate-200 dark:bg-slate-800"></span>
+                  <span>telemetry_logs_stream.sh</span>
+                </div>
+                <span class="text-[9px] uppercase font-bold text-emerald-500 bg-emerald-500/10 py-0.5 px-1.5 rounded animate-pulse">Streaming</span>
+              </div>
+              
+              <div class="flex-1 overflow-y-auto space-y-2 pr-2" id="telemetry-logs-container">
+                <p class="text-slate-400/80 dark:text-slate-500">[08:42:01] INITIATING: Establishing socket cluster bounds...</p>
+                <p class="text-slate-400/80 dark:text-slate-500">[08:42:02] RESOLVED: Node cluster online, responding on port 3000</p>
+                <p class="text-slate-400/80 dark:text-slate-500">[08:42:04] SYSINFO: Fetching network density indices...</p>
+                <p class="text-emerald-500">[08:42:05] CLIENT: Discoverable proximity beacon is active</p>
+                <p class="text-slate-400/80 dark:text-slate-500">[08:42:12] TELEMETRY: Syncing local DiceBear photo seed...</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- NETWORK STATUS STATS SECTION -->
+        <section id="status-section" class="py-16 px-6 max-w-7xl mx-auto border-b border-slate-150 dark:border-slate-900/50 select-none">
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+            <div class="space-y-1">
+              <span class="font-mono text-[9px] uppercase text-slate-400 dark:text-slate-500 tracking-widest block">Broadcast Latency</span>
+              <span class="font-display text-3xl sm:text-4xl font-extrabold text-slate-900 dark:text-white" id="stat-latency">12 ms</span>
+              <span class="text-[9px] text-emerald-500 block">● Fast routing</span>
+            </div>
+            <div class="space-y-1">
+              <span class="font-mono text-[9px] uppercase text-slate-400 dark:text-slate-500 tracking-widest block">Active Peer Terminals</span>
+              <span class="font-display text-3xl sm:text-4xl font-extrabold text-slate-900 dark:text-white" id="stat-active-nodes">148 nodes</span>
+              <span class="text-[9px] text-emerald-500 block">● Global networks</span>
+            </div>
+            <div class="space-y-1">
+              <span class="font-mono text-[9px] uppercase text-slate-400 dark:text-slate-500 tracking-widest block">Secure Transmissions</span>
+              <span class="font-display text-3xl sm:text-4xl font-extrabold text-slate-900 dark:text-white" id="stat-transmissions">83,492+</span>
+              <span class="text-[9px] text-emerald-500 block">● Encrypted</span>
+            </div>
+            <div class="space-y-1">
+              <span class="font-mono text-[9px] uppercase text-slate-400 dark:text-slate-500 tracking-widest block">Network Uptime</span>
+              <span class="font-display text-3xl sm:text-4xl font-extrabold text-slate-900 dark:text-white">99.99%</span>
+              <span class="text-[9px] text-emerald-500 block">● Cluster stability</span>
+            </div>
+          </div>
+        </section>
+
+        <!-- CLOSING SECTION -->
+        <section class="py-20 px-6 max-w-4xl mx-auto text-center select-none">
+          <div class="glass border border-slate-200 dark:border-slate-800/80 rounded-3xl p-8 md:p-12 relative overflow-hidden space-y-6">
+            <div class="absolute inset-0 bg-gradient-to-tr from-emerald-500/5 to-transparent pointer-events-none"></div>
+            <div class="absolute -top-12 -left-12 w-24 h-24 bg-emerald-500/10 dark:bg-emerald-500/5 rounded-full blur-xl pointer-events-none"></div>
+            
+            <h2 class="font-display text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight animate-pulse-slow">
+              Ready to deploy your local Node?
+            </h2>
+            <p class="text-xs text-slate-500 dark:text-slate-400 max-w-md mx-auto leading-relaxed">
+              Initialize your profile seed, share encrypted files instantly, and communicate with nearby terminals with zero proxy buffers.
+            </p>
+            <div class="pt-4 flex justify-center">
+              <button class="btn-launch-terminal px-8 py-4 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-2xl tracking-wide transition-all duration-200 shadow-xl shadow-emerald-600/15 hover:shadow-emerald-500/25 active:scale-95 cursor-pointer flex items-center space-x-2 text-xs">
+                <span>Launch ShareHub Terminal</span>
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-play"><polygon points="6 3 20 12 6 21 6 3"/></svg>
+              </button>
+            </div>
+          </div>
+        </section>
+
+        <!-- PORTFOLIO FOOTER -->
+        <footer class="border-t border-slate-200/50 dark:border-slate-800/50 py-8 px-6 text-center text-[11px] text-slate-400 dark:text-slate-500 select-none">
+          <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
+            <p>© 2026 ShareHub Terminal Networks. All client code runs locally inside isolated secure sandboxes.</p>
+            <p class="font-mono text-[9px] uppercase">VER: 1.4.0-RELEASE • NODE_STATUS: DEPLOYED</p>
+          </div>
+        </footer>
+      </div>
+
+      <!-- AUTHENTICATION OVERLAY -->
+      <div id="auth-screen" class="hidden fixed inset-0 z-40 bg-slate-100/80 dark:bg-slate-950/90 backdrop-blur-md flex items-center justify-center p-4">
+        <div class="relative w-full max-w-md bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-2xl overflow-hidden transition-all duration-300 transform scale-95 p-6 md:p-8 space-y-6">
+          
+          <!-- Close Modal Button -->
+          <div class="absolute top-4 right-4 z-50">
+            <button id="btn-close-auth" class="p-1.5 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors cursor-pointer" title="Back to Showcase">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-x"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+            </button>
+          </div>
+
+          <div class="text-center space-y-2">
+            <div class="inline-flex p-3 bg-emerald-500/10 text-emerald-500 rounded-xl mb-2">
+              <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-share-2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+            </div>
+            <h2 class="font-display text-3xl font-bold tracking-tight text-slate-900 dark:text-white">ShareHub</h2>
+            <p class="text-sm text-slate-500 dark:text-slate-400">Secure File Sharing & Real-Time Messaging</p>
+          </div>
+
+          <!-- Tab Selector: Login vs Sign Up -->
+          <div class="flex border-b border-slate-200 dark:border-slate-800">
+            <button id="auth-tab-signin" class="flex-1 pb-3 text-center text-sm font-semibold border-b-2 border-emerald-500 text-emerald-500">Sign In</button>
+            <button id="auth-tab-signup" class="flex-1 pb-3 text-center text-sm font-semibold border-b-2 border-transparent text-slate-500 hover:text-slate-800 dark:hover:text-slate-200">Sign Up</button>
+          </div>
+
+          <!-- SIGN IN FORM -->
+          <form id="signin-form" class="space-y-4">
+            <div class="space-y-1">
+              <label class="text-xs font-semibold text-slate-600 dark:text-slate-400 uppercase tracking-wider">Email Address</label>
+              <input type="email" id="signin-email" required class="w-full px-4 py-3 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500 transition-all text-sm" placeholder="you@example.com">
+            </div>
+            <div class="space-y-1">
+              <div class="flex justify-between items-center">
+                <label class="text-xs font-semibold text-slate-600 dark:text-slate-400 uppercase tracking-wider">Password</label>
+                <button type="button" id="btn-forgot-password" class="text-xs text-emerald-500 hover:underline">Forgot?</button>
+              </div>
+              <input type="password" id="signin-password" required class="w-full px-4 py-3 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500 transition-all text-sm" placeholder="••••••••">
+            </div>
+            <button type="submit" class="w-full py-3 bg-emerald-600 hover:bg-emerald-500 text-white font-medium rounded-xl shadow-lg shadow-emerald-600/15 hover:shadow-emerald-500/20 active:scale-98 transition-all flex items-center justify-center space-x-2 text-sm cursor-pointer">
+              <span>Sign In</span>
+            </button>
+          </form>
+
+          <!-- SIGN UP FORM -->
+          <form id="signup-form" class="hidden space-y-4">
+            <div class="grid grid-cols-2 gap-4">
+              <div class="space-y-1">
+                <label class="text-xs font-semibold text-slate-600 dark:text-slate-400 uppercase tracking-wider">Full Name</label>
+                <input type="text" id="signup-name" required class="w-full px-4 py-3 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500 transition-all text-sm" placeholder="John Doe">
+              </div>
+              <div class="space-y-1">
+                <label class="text-xs font-semibold text-slate-600 dark:text-slate-400 uppercase tracking-wider">Username</label>
+                <input type="text" id="signup-username" required class="w-full px-4 py-3 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500 transition-all text-sm" placeholder="johndoe">
+              </div>
+            </div>
+            <div class="space-y-1">
+              <label class="text-xs font-semibold text-slate-600 dark:text-slate-400 uppercase tracking-wider">Email Address</label>
+              <input type="email" id="signup-email" required class="w-full px-4 py-3 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500 transition-all text-sm" placeholder="john@example.com">
+            </div>
+            <div class="space-y-1">
+              <label class="text-xs font-semibold text-slate-600 dark:text-slate-400 uppercase tracking-wider">Password</label>
+              <input type="password" id="signup-password" required minlength="6" class="w-full px-4 py-3 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500 transition-all text-sm" placeholder="Minimum 6 characters">
+            </div>
+            <button type="submit" class="w-full py-3 bg-emerald-600 hover:bg-emerald-500 text-white font-medium rounded-xl shadow-lg shadow-emerald-600/15 hover:shadow-emerald-500/20 active:scale-98 transition-all flex items-center justify-center space-x-2 text-sm cursor-pointer">
+              <span>Create Account</span>
+            </button>
+          </form>
+
+          <!-- Divider -->
+          <div class="relative flex py-2 items-center">
+            <div class="flex-grow border-t border-slate-200 dark:border-slate-800"></div>
+            <span class="flex-shrink mx-4 text-xs text-slate-400 dark:text-slate-600 uppercase tracking-wider font-semibold">Or Connect with</span>
+            <div class="flex-grow border-t border-slate-200 dark:border-slate-800"></div>
+          </div>
+
+          <!-- GOOGLE LOGIN -->
+          <button id="btn-google-login" class="w-full py-3 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-800 dark:text-white rounded-xl font-medium transition-all flex items-center justify-center space-x-3 text-sm cursor-pointer border border-slate-200 dark:border-slate-700">
+            <svg class="h-5 w-5" viewBox="0 0 24 24" width="24" height="24" xmlns="http://www.w3.org/2000/svg">
+              <g transform="matrix(1, 0, 0, 1, 0, 0)">
+                <path d="M21.35,11.1H12v2.7h5.38c-0.24,1.28 -0.96,2.37 -2.04,3.1v2.58h3.3c1.93,-1.78 3.04,-4.4 3.04,-7.48c0,-0.64 -0.06,-1.25 -0.17,-1.82z" fill="#4285f4" />
+                <path d="M12,20.5c2.3,0 4.23,-0.76 5.64,-2.08l-3.3,-2.58c-0.92,0.62 -2.1,0.98 -3.34,0.98c-2.57,0 -4.75,-1.74 -5.53,-4.07H2.1v2.66c1.45,2.88 4.41,4.77 7.8,4.77z" fill="#34a853" />
+                <path d="M6.47,12.75a6.05,6.05,0,0,1,0,-3.5V6.59H2.1a10,10,0,0,0,0,8.82l4.37,-2.66z" fill="#fbbc05" />
+                <path d="M12,5.5a5.53,5.53,0,0,1,3.9,1.5l2.9,-2.9A9.92,9.92,0,0,0,12,1.5c-3.39,0 -6.35,1.89 -7.8,4.77l4.37,2.66c0.78,-2.33 2.96,-4.07 5.53,-4.07z" fill="#ea4335" />
+              </g>
+            </svg>
+            <span>Continue with Google</span>
+          </button>
+
+          <p class="text-xs text-center text-slate-400 leading-relaxed">
+            By accessing ShareHub, you agree to our serverless architecture terms. Account profiles and files (up to 800KB) are securely stored in our distributed Firestore cluster.
+          </p>
+        </div>
+      </div>
+
+      <!-- MAIN APP BOARD -->
+      <div id="main-board" class="hidden flex-1 flex flex-col md:flex-row overflow-hidden h-screen max-h-screen">
+        
+        <!-- SIDEBAR NAVIGATION -->
+        <aside class="w-full md:w-64 bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800 flex flex-row md:flex-col md:h-full z-10 select-none">
+          <!-- Logo Header (hidden on mobile) -->
+          <div class="hidden md:flex items-center space-x-3 px-6 py-5 border-b border-slate-200 dark:border-slate-800">
+            <div class="p-2 bg-emerald-500/10 text-emerald-500 rounded-lg">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-share-2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+            </div>
+            <span class="font-display font-bold text-lg tracking-tight text-slate-800 dark:text-white">ShareHub</span>
+          </div>
+
+          <!-- Nav Items -->
+          <nav id="sidebar-nav" class="flex-1 flex flex-row md:flex-col p-2 md:p-4 space-x-1 md:space-x-0 md:space-y-1 overflow-x-auto md:overflow-x-visible w-full md:w-auto">
+            <button data-tab="dashboard" class="nav-btn flex-1 md:flex-none flex items-center justify-center md:justify-start space-x-3 px-3 py-2.5 md:px-4 md:py-3 rounded-xl text-sm font-medium transition-all text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-500/10 cursor-pointer">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-layout-dashboard"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="10" rx="1"/><rect width="7" height="5" x="3" y="14" rx="1"/></svg>
+              <span class="hidden md:inline">Dashboard</span>
+            </button>
+            <button data-tab="chat" class="nav-btn flex-1 md:flex-none flex items-center justify-center md:justify-start space-x-3 px-3 py-2.5 md:px-4 md:py-3 rounded-xl text-sm font-medium transition-all text-slate-500 hover:text-slate-800 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 cursor-pointer">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+              <span class="hidden md:inline">Private Chats</span>
+            </button>
+            <button data-tab="groups" class="nav-btn flex-1 md:flex-none flex items-center justify-center md:justify-start space-x-3 px-3 py-2.5 md:px-4 md:py-3 rounded-xl text-sm font-medium transition-all text-slate-500 hover:text-slate-800 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 cursor-pointer">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-users"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+              <span class="hidden md:inline">Groups</span>
+            </button>
+            <button data-tab="geedrop" class="nav-btn flex-1 md:flex-none flex items-center justify-center md:justify-start space-x-3 px-3 py-2.5 md:px-4 md:py-3 rounded-xl text-sm font-medium transition-all text-slate-500 hover:text-slate-800 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 cursor-pointer relative">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-radio"><circle cx="12" cy="12" r="2"/><path d="M16.24 7.76a6 6 0 0 1 0 8.49"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/><path d="M7.76 16.24a6 6 0 0 1 0-8.49"/><path d="M4.93 19.07a10 10 0 0 1 0-14.14"/></svg>
+              <span class="hidden md:inline">GeeDrop</span>
+              <span id="geedrop-beacon" class="hidden absolute top-3 right-3 md:right-4 h-2.5 w-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
+            </button>
+            <button data-tab="profile" class="nav-btn flex-1 md:flex-none flex items-center justify-center md:justify-start space-x-3 px-3 py-2.5 md:px-4 md:py-3 rounded-xl text-sm font-medium transition-all text-slate-500 hover:text-slate-800 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 cursor-pointer">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-user"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+              <span class="hidden md:inline">Profile</span>
+            </button>
+          </nav>
+
+          <!-- Sidebar Footer Profile Badge (hidden on mobile) -->
+          <div class="hidden md:flex flex-col p-4 border-t border-slate-200 dark:border-slate-800 space-y-3 bg-slate-50/50 dark:bg-slate-900/50">
+            <div class="flex items-center space-x-3">
+              <div class="relative">
+                <img id="sidebar-user-avatar" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%2310b981'/%3E%3C/svg%3E" class="w-10 h-10 rounded-xl object-cover border border-slate-200 dark:border-slate-800 bg-slate-100" />
+                <span id="sidebar-user-presence" class="absolute bottom-0 right-0 block h-2.5 w-2.5 rounded-full ring-2 ring-white dark:ring-slate-900 bg-emerald-500"></span>
+              </div>
+              <div class="flex-1 min-w-0">
+                <h4 id="sidebar-user-name" class="text-xs font-bold truncate">Current User</h4>
+                <p id="sidebar-user-tag" class="text-[10px] font-mono text-slate-400 truncate">@username</p>
+              </div>
+            </div>
+            <div class="flex items-center justify-between">
+              <!-- Dark mode Toggle -->
+              <button id="btn-theme-toggle" class="p-2 text-slate-400 hover:text-slate-600 dark:hover:text-white rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 cursor-pointer" title="Toggle Theme">
+                <svg id="theme-sun-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-sun hidden"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
+                <svg id="theme-moon-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-moon"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+              </button>
+              <button id="btn-signout" class="text-xs font-semibold text-rose-500 hover:text-rose-600 flex items-center space-x-1 hover:bg-rose-500/10 py-1.5 px-3 rounded-lg cursor-pointer transition-all">
+                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-log-out"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+                <span>Logout</span>
+              </button>
+            </div>
+          </div>
+        </aside>
+
+        <!-- MAIN VIEW WRAPPER -->
+        <main class="flex-1 flex flex-col overflow-hidden bg-slate-50 dark:bg-slate-950">
+          
+          <!-- MOBILE HEADER (visible on mobile only) -->
+          <header class="flex md:hidden items-center justify-between px-4 py-3 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 select-none">
+            <div class="flex items-center space-x-2">
+              <span class="p-1.5 bg-emerald-500/10 text-emerald-500 rounded-lg">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-share-2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+              </span>
+              <span class="font-display font-bold text-base text-slate-800 dark:text-white">ShareHub</span>
+            </div>
+            <div class="flex items-center space-x-2">
+              <!-- Dark Mode mobile toggle -->
+              <button id="btn-theme-toggle-mobile" class="p-1.5 text-slate-400 hover:text-slate-600 dark:hover:text-white rounded-lg">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-moon"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+              </button>
+              <button id="btn-signout-mobile" class="p-1.5 text-rose-500 hover:text-rose-600">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-log-out"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+              </button>
+            </div>
+          </header>
+
+          <!-- 1. DASHBOARD TAB VIEW -->
+          <section id="view-dashboard" class="flex-1 overflow-y-auto p-4 md:p-6 space-y-6 fade-in">
+            <!-- Header Grid -->
+            <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+              <div>
+                <h1 id="dashboard-welcome" class="font-display text-2xl md:text-3xl font-bold tracking-tight">Welcome, User!</h1>
+                <p class="text-sm text-slate-500 dark:text-slate-400">Here is your ShareHub real-time activities summary.</p>
+              </div>
+              <div class="flex flex-wrap items-center gap-2">
+                <button id="btn-quick-geedrop" class="py-2.5 px-4 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl text-sm font-semibold shadow-lg shadow-emerald-600/10 hover:shadow-emerald-500/15 active:scale-98 transition-all flex items-center space-x-2 cursor-pointer">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-radio"><circle cx="12" cy="12" r="2"/><path d="M16.24 7.76a6 6 0 0 1 0 8.49"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/><path d="M7.76 16.24a6 6 0 0 1 0-8.49"/><path d="M4.93 19.07a10 10 0 0 1 0-14.14"/></svg>
+                  <span>GeeDrop Nearby</span>
+                </button>
+                <button id="btn-quick-chat" class="py-2.5 px-4 bg-slate-200 dark:bg-slate-800 hover:bg-slate-300 dark:hover:bg-slate-700 text-slate-800 dark:text-white rounded-xl text-sm font-semibold transition-all flex items-center space-x-2 cursor-pointer">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square-plus"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/><line x1="12" y1="7" x2="12" y2="13"/><line x1="9" y1="10" x2="15" y2="10"/></svg>
+                  <span>New DM Chat</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Stats grid -->
+            <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 select-none">
+              <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-4 rounded-2xl flex items-center space-x-4">
+                <div class="p-3 bg-blue-500/10 text-blue-500 rounded-xl">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-folder-open"><path d="m6 14 1.45-2.9A2 2 0 0 1 9.24 10H20a2 2 0 0 1 1.94 2.5l-1.55 6a2 2 0 0 1-1.94 1.5H4a2 2 0 0 1-2-2V5c0-1.1.9-2 2-2h3.93a2 2 0 0 1 1.66.9l.82 1.2a2 2 0 0 0 1.66.9H18a2 2 0 0 1 2 2v2"/></svg>
+                </div>
+                <div>
+                  <h4 class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Total Shared</h4>
+                  <p id="stats-total-files" class="text-lg font-bold">0 files</p>
+                </div>
+              </div>
+              <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-4 rounded-2xl flex items-center space-x-4">
+                <div class="p-3 bg-emerald-500/10 text-emerald-500 rounded-xl">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-database"><rect width="20" height="8" x="2" y="2" rx="2"/><rect width="20" height="8" x="2" y="14" rx="2"/><line x1="6" y1="6" x2="6.01" y2="6"/><line x1="6" y1="18" x2="6.01" y2="18"/></svg>
+                </div>
+                <div>
+                  <h4 class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Storage Capacity</h4>
+                  <p id="stats-storage-used" class="text-lg font-bold">0 KB / 50 MB</p>
+                </div>
+              </div>
+              <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-4 rounded-2xl flex items-center space-x-4">
+                <div class="p-3 bg-indigo-500/10 text-indigo-500 rounded-xl">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-radio"><circle cx="12" cy="12" r="2"/><path d="M16.24 7.76a6 6 0 0 1 0 8.49"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/><path d="M7.76 16.24a6 6 0 0 1 0-8.49"/><path d="M4.93 19.07a10 10 0 0 1 0-14.14"/></svg>
+                </div>
+                <div>
+                  <h4 class="text-xs font-semibold text-slate-400 uppercase tracking-wider">GeeDrop State</h4>
+                  <p id="stats-geedrop-status" class="text-lg font-bold text-amber-500">Disabled</p>
+                </div>
+              </div>
+              <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-4 rounded-2xl flex items-center space-x-4">
+                <div class="p-3 bg-purple-500/10 text-purple-500 rounded-xl">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-wifi"><path d="M12 20h.01"/><path d="M8.5 16.5a5 5 0 0 1 7 0"/><path d="M5 13a10 10 0 0 1 14 0"/><path d="M1.5 9.5a15 15 0 0 1 21 0"/></svg>
+                </div>
+                <div>
+                  <h4 class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Online Presence</h4>
+                  <p id="stats-online-users" class="text-lg font-bold text-slate-500">Connecting...</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Dashboard Split Rows -->
+            <div class="grid grid-cols-1 xl:grid-cols-12 gap-6">
+              
+              <!-- Left side: files sharing overview -->
+              <div class="xl:col-span-8 space-y-6">
+                <!-- Search & Filters -->
+                <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 md:p-5 flex flex-col md:flex-row gap-3">
+                  <div class="flex-1 relative">
+                    <input type="text" id="dash-file-search" class="w-full pl-10 pr-4 py-2.5 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/30" placeholder="Search files by title, extensions...">
+                    <svg class="absolute left-3.5 top-3 text-slate-400 h-4.5 w-4.5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+                  </div>
+                  <div class="flex items-center gap-2">
+                    <select id="dash-file-sort" class="px-3 py-2.5 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/30 cursor-pointer">
+                      <option value="recent">Sort: Newest</option>
+                      <option value="oldest">Sort: Oldest</option>
+                      <option value="size-desc">Size: Largest</option>
+                      <option value="size-asc">Size: Smallest</option>
+                    </select>
+                  </div>
+                </div>
+
+                <!-- Shared Files Container -->
+                <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl overflow-hidden shadow-sm">
+                  <div class="px-5 py-4 border-b border-slate-200 dark:border-slate-800 flex justify-between items-center bg-slate-50/50 dark:bg-slate-900/50">
+                    <h3 class="font-display font-bold text-sm tracking-tight text-slate-800 dark:text-white uppercase tracking-wider">Shared Files Directory</h3>
+                    <span id="dash-file-count" class="text-xs bg-slate-150 dark:bg-slate-800 text-slate-500 dark:text-slate-400 py-1 px-2.5 rounded-full font-mono font-medium">0 Total</span>
+                  </div>
+                  
+                  <div id="dash-files-list" class="divide-y divide-slate-100 dark:divide-slate-800 max-h-[420px] overflow-y-auto">
+                    <!-- Dynamic Files list empty state -->
+                    <div class="p-8 text-center space-y-3">
+                      <div class="inline-flex p-3 bg-slate-100 dark:bg-slate-800 text-slate-400 rounded-full">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-file-text"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M10 9H8"/><path d="M16 13H8"/><path d="M16 17H8"/></svg>
+                      </div>
+                      <p class="text-sm font-medium text-slate-500 dark:text-slate-400">No files shared yet</p>
+                      <p class="text-xs text-slate-400 dark:text-slate-600 max-w-xs mx-auto">Upload files directly to private chats, group chat channels, or transmit nearby via GeeDrop.</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Right side: Notifications & Quick actions / Online People -->
+              <div class="xl:col-span-4 space-y-6">
+                <!-- Live Presence List -->
+                <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 shadow-sm space-y-4">
+                  <div class="flex justify-between items-center border-b border-slate-100 dark:border-slate-800 pb-3">
+                    <h3 class="font-display font-bold text-sm text-slate-800 dark:text-white uppercase tracking-wider">Active Members</h3>
+                    <span id="active-members-badge" class="h-2 w-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                  </div>
+                  <div id="dash-active-users" class="space-y-3 max-h-[220px] overflow-y-auto pr-1">
+                    <p class="text-xs text-slate-400 dark:text-slate-500 text-center py-4">No online users found</p>
+                  </div>
+                </div>
+
+                <!-- Recent notifications -->
+                <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 shadow-sm space-y-4">
+                  <div class="flex justify-between items-center border-b border-slate-100 dark:border-slate-800 pb-3">
+                    <h3 class="font-display font-bold text-sm text-slate-800 dark:text-white uppercase tracking-wider">Notifications</h3>
+                    <button id="btn-clear-notifications" class="text-[10px] text-slate-400 hover:text-rose-500 font-semibold uppercase tracking-wider">Clear All</button>
+                  </div>
+                  <div id="dash-notifications-list" class="space-y-3 max-h-[280px] overflow-y-auto pr-1">
+                    <p class="text-xs text-slate-400 dark:text-slate-500 text-center py-4">All caught up! No notifications.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- 2. PRIVATE CHAT TAB VIEW -->
+          <section id="view-chat" class="flex-1 overflow-hidden flex flex-row hidden-view fade-in">
+            <!-- Sidebar: Conversation Rooms -->
+            <div id="chat-rooms-sidebar" class="w-full md:w-80 border-r border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 flex flex-col h-full select-none">
+              <div class="p-4 border-b border-slate-200 dark:border-slate-800 space-y-3">
+                <h2 class="font-display font-bold text-lg">Direct Messages</h2>
+                <div class="relative">
+                  <input type="text" id="chat-user-search" class="w-full pl-9 pr-4 py-2 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl text-sm focus:outline-none" placeholder="Find user to chat...">
+                  <svg class="absolute left-3 top-2.5 text-slate-400 h-4 w-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+                </div>
+              </div>
+              
+              <!-- Rooms/Users directory List -->
+              <div id="chat-rooms-list" class="flex-1 overflow-y-auto divide-y divide-slate-50 dark:divide-slate-800/50">
+                <!-- Dynamic users matching search/recent conversations -->
+              </div>
+            </div>
+
+            <!-- Main Conversation Area -->
+            <div id="chat-active-window" class="flex-1 flex flex-col h-full bg-slate-100/50 dark:bg-slate-950/20 relative">
+              <!-- Empty state default -->
+              <div id="chat-window-empty" class="absolute inset-0 flex flex-col items-center justify-center p-8 text-center space-y-4">
+                <div class="p-4 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl text-slate-400 shadow-sm animate-bounce">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                </div>
+                <div>
+                  <h3 class="font-display font-bold text-base">Select a user to chat</h3>
+                  <p class="text-xs text-slate-400 dark:text-slate-600 max-w-xs mx-auto mt-1">Start chatting securely in real-time. Share messages, emojis, reactions, and files (up to 800KB).</p>
+                </div>
+              </div>
+
+              <!-- Main chat frame header -->
+              <div id="chat-window-frame" class="hidden flex-1 flex flex-col h-full overflow-hidden">
+                <header class="px-6 py-4 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between shadow-sm z-10">
+                  <div class="flex items-center space-x-3">
+                    <button id="btn-back-rooms" class="md:hidden p-1 mr-1 text-slate-500 hover:text-slate-800 dark:hover:text-white" title="Conversations">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-left"><path d="m15 18-6-6 6-6"/></svg>
+                    </button>
+                    <div class="relative">
+                      <img id="active-chat-avatar" src="" class="w-10 h-10 rounded-xl object-cover bg-slate-100">
+                      <span id="active-chat-presence" class="absolute bottom-0 right-0 block h-2.5 w-2.5 rounded-full ring-2 ring-white dark:ring-slate-900 bg-slate-300"></span>
+                    </div>
+                    <div>
+                      <h3 id="active-chat-name" class="font-bold text-sm tracking-tight leading-none">Receiver Name</h3>
+                      <p id="active-chat-subtext" class="text-[10px] text-slate-400 mt-1 font-mono leading-none">offline</p>
+                    </div>
+                  </div>
+                  <div class="flex items-center space-x-2">
+                    <span id="chat-typing-indicator" class="hidden text-xs text-emerald-500 font-medium italic mr-2">is typing...</span>
+                  </div>
+                </header>
+
+                <!-- Messages Feed -->
+                <div id="chat-messages-container" class="flex-1 overflow-y-auto p-4 md:p-6 space-y-4 bg-slate-50/50 dark:bg-slate-950/30">
+                  <!-- Messages loaded dynamically -->
+                </div>
+
+                <!-- Reply Attachment bar -->
+                <div id="chat-reply-preview" class="hidden bg-slate-100 dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 px-6 py-2 flex items-center justify-between text-xs text-slate-500 dark:text-slate-400">
+                  <div class="flex items-center space-x-2 truncate">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="lucide lucide-corner-down-right"><polyline points="15 10 20 15 15 20"/><path d="M4 4v7a4 4 0 0 0 4 4h12"/></svg>
+                    <span class="font-semibold">Replying to:</span>
+                    <span id="chat-reply-text" class="italic truncate">message here</span>
+                  </div>
+                  <button id="btn-cancel-reply" class="text-rose-500 hover:text-rose-600 font-semibold p-1">Cancel</button>
+                </div>
+
+                <!-- Message Input Control Bar -->
+                <div class="p-4 bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800">
+                  <form id="chat-input-form" class="flex items-center gap-2 relative">
+                    <!-- File input hidden -->
+                    <input type="file" id="chat-file-input" class="hidden">
+                    <button type="button" id="btn-chat-file" class="p-2.5 text-slate-400 hover:text-emerald-500 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl cursor-pointer transition-all" title="Share File (Max 800KB)">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-paperclip"><path d="m21.44 11.05-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>
+                    </button>
+                    
+                    <button type="button" id="btn-chat-emoji" class="p-2.5 text-slate-400 hover:text-emerald-500 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl cursor-pointer transition-all" title="Add Emoji">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-smile"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
+                    </button>
+
+                    <!-- Emoji popover -->
+                    <div id="emoji-picker-popover" class="hidden absolute bottom-14 left-0 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-2.5 rounded-2xl grid grid-cols-6 gap-1 shadow-2xl z-30 select-none">
+                      <span class="emoji-btn p-1.5 hover:bg-slate-100 dark:hover:bg-slate-800 rounded cursor-pointer text-lg text-center select-none">😀</span>
+                      <span class="emoji-btn p-1.5 hover:bg-slate-100 dark:hover:bg-slate-800 rounded cursor-pointer text-lg text-center select-none">😂</span>
+                      <span class="emoji-btn p-1.5 hover:bg-slate-100 dark:hover:bg-slate-800 rounded cursor-pointer text-lg text-center select-none">🔥</span>
+                      <span class="emoji-btn p-1.5 hover:bg-slate-100 dark:hover:bg-slate-800 rounded cursor-pointer text-lg text-center select-none">👍</span>
+                      <span class="emoji-btn p-1.5 hover:bg-slate-100 dark:hover:bg-slate-800 rounded cursor-pointer text-lg text-center select-none">❤️</span>
+                      <span class="emoji-btn p-1.5 hover:bg-slate-100 dark:hover:bg-slate-800 rounded cursor-pointer text-lg text-center select-none">✨</span>
+                      <span class="emoji-btn p-1.5 hover:bg-slate-100 dark:hover:bg-slate-800 rounded cursor-pointer text-lg text-center select-none">👏</span>
+                      <span class="emoji-btn p-1.5 hover:bg-slate-100 dark:hover:bg-slate-800 rounded cursor-pointer text-lg text-center select-none">🎉</span>
+                      <span class="emoji-btn p-1.5 hover:bg-slate-100 dark:hover:bg-slate-800 rounded cursor-pointer text-lg text-center select-none">🚀</span>
+                      <span class="emoji-btn p-1.5 hover:bg-slate-100 dark:hover:bg-slate-800 rounded cursor-pointer text-lg text-center select-none">👀</span>
+                      <span class="emoji-btn p-1.5 hover:bg-slate-100 dark:hover:bg-slate-800 rounded cursor-pointer text-lg text-center select-none">🙌</span>
+                      <span class="emoji-btn p-1.5 hover:bg-slate-100 dark:hover:bg-slate-800 rounded cursor-pointer text-lg text-center select-none">💡</span>
+                    </div>
+
+                    <input type="text" id="chat-input-text" autocomplete="off" class="flex-1 py-3 px-4 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500/30 text-sm" placeholder="Type a secure message...">
+                    <button type="submit" class="p-3 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl shadow-md active:scale-95 transition-all cursor-pointer">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-send"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+                    </button>
+                  </form>
+                  <!-- Drag and Drop Overlay for chatting -->
+                  <div id="chat-drag-overlay" class="hidden absolute inset-0 bg-emerald-500/10 dark:bg-emerald-500/5 border-2 border-dashed border-emerald-500 m-2 rounded-2xl flex flex-col items-center justify-center space-y-2 pointer-events-none z-20">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="lucide lucide-upload-cloud text-emerald-500 animate-bounce"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"/><path d="M12 10v6"/><path d="m9 13 3-3 3 3"/></svg>
+                    <span class="text-sm font-semibold text-emerald-500">Drop files to upload instantly!</span>
+                    <span class="text-xs text-slate-400">Max size 800KB</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- 3. GROUP CHAT TAB VIEW -->
+          <section id="view-groups" class="flex-1 overflow-hidden flex flex-row hidden-view fade-in">
+            <!-- Sidebar: Groups Directory -->
+            <div id="groups-sidebar" class="w-full md:w-80 border-r border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 flex flex-col h-full select-none">
+              <div class="p-4 border-b border-slate-200 dark:border-slate-800 space-y-3">
+                <div class="flex justify-between items-center">
+                  <h2 class="font-display font-bold text-lg">Group Channels</h2>
+                  <button id="btn-create-group-modal" class="p-1.5 bg-emerald-500/10 text-emerald-500 hover:bg-emerald-500/20 rounded-lg cursor-pointer transition-all" title="Create Group">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-plus"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                  </button>
+                </div>
+                <div class="relative">
+                  <input type="text" id="groups-filter-search" class="w-full pl-9 pr-4 py-2 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl text-sm focus:outline-none" placeholder="Search or join groups...">
+                  <svg class="absolute left-3 top-2.5 text-slate-400 h-4 w-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+                </div>
+              </div>
+
+              <!-- Groups List -->
+              <div id="groups-rooms-list" class="flex-1 overflow-y-auto divide-y divide-slate-50 dark:divide-slate-800/50">
+                <!-- Group cards rendered dynamically -->
+              </div>
+            </div>
+
+            <!-- Main Group Window -->
+            <div id="group-active-window" class="flex-1 flex flex-col h-full bg-slate-100/50 dark:bg-slate-950/20 relative">
+              <!-- Empty state default -->
+              <div id="group-window-empty" class="absolute inset-0 flex flex-col items-center justify-center p-8 text-center space-y-4 animate-fade-in">
+                <div class="p-4 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl text-slate-400 shadow-sm">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-users"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                </div>
+                <div>
+                  <h3 class="font-display font-bold text-base">Select a group channel</h3>
+                  <p class="text-xs text-slate-400 dark:text-slate-600 max-w-xs mx-auto mt-1">Join group rooms or spin up custom workspaces to easily share files, chat together, and pin media files.</p>
+                </div>
+              </div>
+
+              <!-- Main group frame -->
+              <div id="group-window-frame" class="hidden flex-1 flex flex-col h-full overflow-hidden">
+                <header class="px-6 py-4 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between shadow-sm z-10">
+                  <div class="flex items-center space-x-3">
+                    <button id="btn-group-back-rooms" class="md:hidden p-1 mr-1 text-slate-500 hover:text-slate-800 dark:hover:text-white" title="Channels">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-left"><path d="m15 18-6-6 6-6"/></svg>
+                    </button>
+                    <img id="active-group-avatar" src="" class="w-10 h-10 rounded-xl object-cover bg-slate-100">
+                    <div>
+                      <h3 id="active-group-name" class="font-bold text-sm tracking-tight leading-none">Group Name</h3>
+                      <p id="active-group-subtext" class="text-[10px] text-slate-400 mt-1 leading-none">0 members</p>
+                    </div>
+                  </div>
+                  <div class="flex items-center space-x-2">
+                    <button id="btn-group-info" class="p-2 text-slate-400 hover:text-emerald-500 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl cursor-pointer transition-all" title="Group Details">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-info"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+                    </button>
+                  </div>
+                </header>
+
+                <div class="flex-1 flex overflow-hidden">
+                  <!-- Group messaging main area -->
+                  <div class="flex-1 flex flex-col h-full overflow-hidden">
+                    <!-- Messages Container -->
+                    <div id="group-messages-container" class="flex-1 overflow-y-auto p-4 md:p-6 space-y-4 bg-slate-50/50 dark:bg-slate-950/30">
+                      <!-- Group messages loaded dynamically -->
+                    </div>
+
+                    <!-- Input message box -->
+                    <div class="p-4 bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800">
+                      <form id="group-input-form" class="flex items-center gap-2 relative">
+                        <input type="file" id="group-file-input" class="hidden">
+                        <button type="button" id="btn-group-file" class="p-2.5 text-slate-400 hover:text-emerald-500 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl cursor-pointer" title="Share File (Max 800KB)">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-paperclip"><path d="m21.44 11.05-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>
+                        </button>
+                        <input type="text" id="group-input-text" autocomplete="off" class="flex-1 py-3 px-4 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500/30 text-sm" placeholder="Post group message...">
+                        <button type="submit" class="p-3 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl shadow-md active:scale-95 transition-all cursor-pointer">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-send"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+                        </button>
+                      </form>
+                    </div>
+                  </div>
+
+                  <!-- Right Panel: Collapsible Group Info -->
+                  <div id="group-info-panel" class="hidden w-64 border-l border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 overflow-y-auto h-full p-4 space-y-6 select-none animate-fade-in">
+                    <div>
+                      <h4 class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">About Group</h4>
+                      <p id="group-info-desc" class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">No description provided</p>
+                    </div>
+
+                    <div class="space-y-3">
+                      <div class="flex justify-between items-center">
+                        <h4 class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Group Members</h4>
+                        <button id="btn-add-member-modal" class="text-xs font-bold text-emerald-500 hover:underline">Invite</button>
+                      </div>
+                      <div id="group-info-members-list" class="space-y-2.5">
+                        <!-- Members list -->
+                      </div>
+                    </div>
+
+                    <div class="space-y-3 pt-3 border-t border-slate-100 dark:border-slate-800">
+                      <button id="btn-leave-group" class="w-full py-2 bg-rose-500/10 hover:bg-rose-500/20 text-rose-500 text-xs font-semibold rounded-xl transition-all cursor-pointer">Leave Group</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- 4. GEEDROP TAB VIEW -->
+          <section id="view-geedrop" class="flex-1 overflow-y-auto p-4 md:p-6 space-y-6 hidden-view fade-in">
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 border-b border-slate-200 dark:border-slate-800 pb-5">
+              <div>
+                <h1 class="font-display text-2xl md:text-3xl font-bold tracking-tight">GeeDrop Discoverability</h1>
+                <p class="text-sm text-slate-500 dark:text-slate-400">Share files securely with discoverable nearby devices immediately.</p>
+              </div>
+              <div class="flex items-center space-x-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-2.5 rounded-xl">
+                <span class="text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">My Visibility:</span>
+                <button id="btn-geedrop-toggle" class="relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent bg-slate-200 dark:bg-slate-800 transition-colors duration-200 ease-in-out focus:outline-none">
+                  <span id="geedrop-toggle-slider" class="pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out translate-x-0"></span>
+                </button>
+                <span id="geedrop-toggle-status" class="text-xs font-bold text-slate-400 uppercase">Hidden</span>
+              </div>
+            </div>
+
+            <!-- Discovery Stage / Radar animation -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+              
+              <!-- Left side: Radar stage -->
+              <div class="lg:col-span-7 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 md:p-8 flex flex-col items-center justify-center relative min-h-[380px] overflow-hidden select-none">
+                <!-- Visual Radar ring loops -->
+                <div id="radar-animation-container" class="absolute inset-0 flex items-center justify-center pointer-events-none opacity-20 hidden">
+                  <div class="absolute w-80 h-80 rounded-full border border-emerald-500 animate-ping" style="animation-duration: 3s"></div>
+                  <div class="absolute w-[480px] h-[480px] rounded-full border border-emerald-500 animate-ping" style="animation-duration: 4s"></div>
+                  <div class="absolute w-[640px] h-[640px] rounded-full border border-emerald-500 animate-ping" style="animation-duration: 5s"></div>
+                </div>
+
+                <div id="radar-disabled-state" class="text-center space-y-4 max-w-xs z-10">
+                  <div class="inline-flex p-4 bg-slate-100 dark:bg-slate-800 text-slate-400 rounded-full">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-radio-off"><path d="M2 2l20 20"/><path d="M16.24 7.76a6 6 0 0 1 0 8.49L12 12"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/><path d="M7.76 16.24a6 6 0 0 1-2.12-4.24"/><path d="M4.93 19.07a10 10 0 0 1-2.12-7.07"/></svg>
+                  </div>
+                  <h3 class="font-display font-bold text-base">Discovery is Turned Off</h3>
+                  <p class="text-xs text-slate-400 dark:text-slate-500">Enable your GeeDrop visibility using the toggle switch above to scan and be discoverable to other members.</p>
+                </div>
+
+                <div id="radar-enabled-state" class="hidden text-center z-10 w-full space-y-6">
+                  <div class="relative inline-flex mb-2">
+                    <div class="p-4 bg-emerald-500/10 text-emerald-500 rounded-full">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-radio"><circle cx="12" cy="12" r="2"/><path d="M16.24 7.76a6 6 0 0 1 0 8.49"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/><path d="M7.76 16.24a6 6 0 0 1 0-8.49"/><path d="M4.93 19.07a10 10 0 0 1 0-14.14"/></svg>
+                    </div>
+                  </div>
+                  
+                  <div>
+                    <h3 class="font-display font-bold text-base">Scanning for nearby devices...</h3>
+                    <p class="text-xs text-emerald-500 animate-pulse mt-1">Discoverable as: <span id="geedrop-discoverable-name" class="font-bold underline">Device Name</span></p>
+                  </div>
+
+                  <!-- Nearby discoverable grid -->
+                  <div id="geedrop-radar-devices" class="grid grid-cols-2 sm:grid-cols-3 gap-4 max-w-md mx-auto pt-4">
+                    <!-- Loaded dynamically -->
+                  </div>
+                </div>
+              </div>
+
+              <!-- Right side: Transfers log & history -->
+              <div class="lg:col-span-5 space-y-6">
+                <!-- Active Transfers -->
+                <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 shadow-sm space-y-4">
+                  <h3 class="font-display font-bold text-sm tracking-tight text-slate-800 dark:text-white uppercase tracking-wider border-b border-slate-100 dark:border-slate-800 pb-3">Active Transfers</h3>
+                  <div id="geedrop-active-transfers" class="space-y-3 max-h-[220px] overflow-y-auto pr-1">
+                    <p class="text-xs text-slate-400 dark:text-slate-500 text-center py-4">No ongoing transfers</p>
+                  </div>
+                </div>
+
+                <!-- Complete Transfers History -->
+                <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 shadow-sm space-y-4">
+                  <h3 class="font-display font-bold text-sm tracking-tight text-slate-800 dark:text-white uppercase tracking-wider border-b border-slate-100 dark:border-slate-800 pb-3">Transfer Log History</h3>
+                  <div id="geedrop-history-transfers" class="space-y-3 max-h-[280px] overflow-y-auto pr-1">
+                    <p class="text-xs text-slate-400 dark:text-slate-500 text-center py-4">Transfer log is currently empty</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- 5. USER PROFILE TAB VIEW -->
+          <section id="view-profile" class="flex-1 overflow-y-auto p-4 md:p-6 max-w-2xl mx-auto space-y-6 hidden-view fade-in">
+            <div class="border-b border-slate-200 dark:border-slate-800 pb-5">
+              <h1 class="font-display text-2xl md:text-3xl font-bold tracking-tight">User Settings</h1>
+              <p class="text-sm text-slate-500 dark:text-slate-400">Configure your ShareHub identities, avatars, and local device host details.</p>
+            </div>
+
+            <form id="profile-edit-form" class="space-y-6 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-6 md:p-8 rounded-2xl shadow-sm">
+              <!-- Avatar Preset Choice Grid -->
+              <div class="space-y-3 select-none">
+                <label class="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Choose Profile Avatar</label>
+                <input type="hidden" id="profile-avatar-input" value="1">
+                <div class="grid grid-cols-4 sm:grid-cols-8 gap-3">
+                  <!-- Generated Avatars list -->
+                  <div class="avatar-option rounded-xl p-0.5 border-2 border-emerald-500 cursor-pointer overflow-hidden transition-all duration-150 transform scale-105" data-avatar-id="1">
+                    <img src="https://api.dicebear.com/7.x/bottts/svg?seed=sharehub1" class="w-full h-12 object-cover bg-slate-100 dark:bg-slate-950">
+                  </div>
+                  <div class="avatar-option rounded-xl p-0.5 border-2 border-transparent hover:border-slate-300 dark:hover:border-slate-700 cursor-pointer overflow-hidden transition-all duration-150" data-avatar-id="2">
+                    <img src="https://api.dicebear.com/7.x/bottts/svg?seed=sharehub2" class="w-full h-12 object-cover bg-slate-100 dark:bg-slate-950">
+                  </div>
+                  <div class="avatar-option rounded-xl p-0.5 border-2 border-transparent hover:border-slate-300 dark:hover:border-slate-700 cursor-pointer overflow-hidden transition-all duration-150" data-avatar-id="3">
+                    <img src="https://api.dicebear.com/7.x/bottts/svg?seed=sharehub3" class="w-full h-12 object-cover bg-slate-100 dark:bg-slate-950">
+                  </div>
+                  <div class="avatar-option rounded-xl p-0.5 border-2 border-transparent hover:border-slate-300 dark:hover:border-slate-700 cursor-pointer overflow-hidden transition-all duration-150" data-avatar-id="4">
+                    <img src="https://api.dicebear.com/7.x/bottts/svg?seed=sharehub4" class="w-full h-12 object-cover bg-slate-100 dark:bg-slate-950">
+                  </div>
+                  <div class="avatar-option rounded-xl p-0.5 border-2 border-transparent hover:border-slate-300 dark:hover:border-slate-700 cursor-pointer overflow-hidden transition-all duration-150" data-avatar-id="5">
+                    <img src="https://api.dicebear.com/7.x/bottts/svg?seed=sharehub5" class="w-full h-12 object-cover bg-slate-100 dark:bg-slate-950">
+                  </div>
+                  <div class="avatar-option rounded-xl p-0.5 border-2 border-transparent hover:border-slate-300 dark:hover:border-slate-700 cursor-pointer overflow-hidden transition-all duration-150" data-avatar-id="6">
+                    <img src="https://api.dicebear.com/7.x/bottts/svg?seed=sharehub6" class="w-full h-12 object-cover bg-slate-100 dark:bg-slate-950">
+                  </div>
+                  <div class="avatar-option rounded-xl p-0.5 border-2 border-transparent hover:border-slate-300 dark:hover:border-slate-700 cursor-pointer overflow-hidden transition-all duration-150" data-avatar-id="7">
+                    <img src="https://api.dicebear.com/7.x/bottts/svg?seed=sharehub7" class="w-full h-12 object-cover bg-slate-100 dark:bg-slate-950">
+                  </div>
+                  <div class="avatar-option rounded-xl p-0.5 border-2 border-transparent hover:border-slate-300 dark:hover:border-slate-700 cursor-pointer overflow-hidden transition-all duration-150" data-avatar-id="8">
+                    <img src="https://api.dicebear.com/7.x/bottts/svg?seed=sharehub8" class="w-full h-12 object-cover bg-slate-100 dark:bg-slate-950">
+                  </div>
+                </div>
+              </div>
+
+              <!-- General Inputs -->
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="space-y-1">
+                  <label class="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Display Name</label>
+                  <input type="text" id="profile-display-name" required class="w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500/30 text-sm">
+                </div>
+                <div class="space-y-1">
+                  <label class="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Username</label>
+                  <input type="text" id="profile-username" required class="w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500/30 text-sm">
+                </div>
+              </div>
+
+              <div class="space-y-1">
+                <label class="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Bio Details</label>
+                <textarea id="profile-bio" rows="3" class="w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500/30 text-sm" placeholder="Tell us about yourself..."></textarea>
+              </div>
+
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-3 border-t border-slate-100 dark:border-slate-800">
+                <div class="space-y-1">
+                  <label class="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Device Broadcast Name</label>
+                  <input type="text" id="profile-device-name" class="w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500/30 text-sm">
+                </div>
+                <div class="space-y-1">
+                  <label class="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Device Form Factor Type</label>
+                  <select id="profile-device-type" class="w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500/30 text-sm cursor-pointer">
+                    <option value="Laptop">💻 Laptop Computer</option>
+                    <option value="Mobile Phone">📱 Mobile Phone</option>
+                    <option value="Tablet">📟 Tablet PC</option>
+                    <option value="Smart Display">📺 Smart Screen</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="flex justify-end pt-3">
+                <button type="submit" class="py-2.5 px-6 bg-emerald-600 hover:bg-emerald-500 text-white font-semibold rounded-xl shadow-lg active:scale-98 transition-all cursor-pointer">
+                  Save Changes
+                </button>
+              </div>
+            </form>
+          </section>
+
+        </main>
+      </div>
+
+    </div>
+
+    <!-- 6. MODALS OVERLAYS SYSTEM -->
+
+    <!-- A. CREATE GROUP MODAL -->
+    <div id="modal-create-group" class="hidden fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4 select-none animate-fade-in">
+      <div class="w-full max-w-md bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-2xl p-6 space-y-4">
+        <div class="flex justify-between items-center">
+          <h3 class="font-display font-bold text-lg">Create New Group Channel</h3>
+          <button id="btn-close-create-group" class="p-1 text-slate-400 hover:text-slate-600 dark:hover:text-white">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-x"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+          </button>
+        </div>
+        <form id="group-create-form" class="space-y-4">
+          <div class="space-y-1">
+            <label class="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Group Name</label>
+            <input type="text" id="new-group-name" required class="w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl text-sm focus:outline-none" placeholder="e.g. Design Team Workspace">
+          </div>
+          <div class="space-y-1">
+            <label class="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Description</label>
+            <textarea id="new-group-desc" rows="2" class="w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl text-sm focus:outline-none" placeholder="Purpose of this group..."></textarea>
+          </div>
+          <div class="space-y-2">
+            <label class="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Select Preset Photo Badge</label>
+            <div class="grid grid-cols-4 gap-2">
+              <div class="group-photo-option rounded-xl p-0.5 border-2 border-emerald-500 cursor-pointer overflow-hidden transition-all duration-150" data-seed="group1">
+                <img src="https://api.dicebear.com/7.x/identicon/svg?seed=group1" class="w-full h-10 object-cover bg-slate-100 dark:bg-slate-950">
+              </div>
+              <div class="group-photo-option rounded-xl p-0.5 border-2 border-transparent hover:border-slate-300 dark:hover:border-slate-700 cursor-pointer overflow-hidden transition-all duration-150" data-seed="group2">
+                <img src="https://api.dicebear.com/7.x/identicon/svg?seed=group2" class="w-full h-10 object-cover bg-slate-100 dark:bg-slate-950">
+              </div>
+              <div class="group-photo-option rounded-xl p-0.5 border-2 border-transparent hover:border-slate-300 dark:hover:border-slate-700 cursor-pointer overflow-hidden transition-all duration-150" data-seed="group3">
+                <img src="https://api.dicebear.com/7.x/identicon/svg?seed=group3" class="w-full h-10 object-cover bg-slate-100 dark:bg-slate-950">
+              </div>
+              <div class="group-photo-option rounded-xl p-0.5 border-2 border-transparent hover:border-slate-300 dark:hover:border-slate-700 cursor-pointer overflow-hidden transition-all duration-150" data-seed="group4">
+                <img src="https://api.dicebear.com/7.x/identicon/svg?seed=group4" class="w-full h-10 object-cover bg-slate-100 dark:bg-slate-950">
+              </div>
+            </div>
+            <input type="hidden" id="new-group-photo-input" value="group1">
+          </div>
+          <div class="flex justify-end pt-2">
+            <button type="submit" class="py-2.5 px-6 bg-emerald-600 hover:bg-emerald-500 text-white font-semibold rounded-xl shadow-lg cursor-pointer">
+              Create Group
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- B. INVITE MEMBER TO GROUP MODAL -->
+    <div id="modal-add-member" class="hidden fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4 select-none animate-fade-in">
+      <div class="w-full max-w-md bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-2xl p-6 space-y-4">
+        <div class="flex justify-between items-center">
+          <h3 class="font-display font-bold text-lg">Invite Members</h3>
+          <button id="btn-close-add-member" class="p-1 text-slate-400 hover:text-slate-600 dark:hover:text-white">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-x"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+          </button>
+        </div>
+        <div class="space-y-3">
+          <input type="text" id="invite-user-search" class="w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl text-sm focus:outline-none" placeholder="Type name or @username to search...">
+          <div id="invite-users-list" class="divide-y divide-slate-100 dark:divide-slate-800 max-h-60 overflow-y-auto">
+            <!-- Dynamic list of potential members -->
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- C. GEEDROP TRANSFER PROMPT OVERLAY (ALERT DIALOG WHEN RECEIVING FILE) -->
+    <div id="modal-geedrop-prompt" class="hidden fixed inset-0 z-50 bg-slate-950/90 backdrop-blur-md flex items-center justify-center p-4 select-none animate-fade-in">
+      <div class="w-full max-w-sm bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-2xl p-6 text-center space-y-5">
+        <div class="inline-flex p-4 bg-emerald-500/10 text-emerald-500 rounded-full animate-bounce">
+          <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-download-cloud"><path d="M4 14.899A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 2.5 8.242"/><path d="M12 12v6"/><path d="m8 14 4 4 4-4"/></svg>
+        </div>
+        <div>
+          <h3 class="font-display font-bold text-lg" id="geedrop-prompt-sender">User-X</h3>
+          <p class="text-sm text-slate-500 dark:text-slate-400 mt-1">is sending you a file via GeeDrop</p>
+        </div>
+        
+        <!-- File Details Card -->
+        <div class="bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 p-3 rounded-xl flex items-center space-x-3 text-left">
+          <div class="p-2 bg-emerald-500/10 text-emerald-500 rounded-lg shrink-0">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-file"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/></svg>
+          </div>
+          <div class="min-w-0 flex-1">
+            <h4 id="geedrop-prompt-filename" class="text-xs font-bold truncate">File_Name.pdf</h4>
+            <p id="geedrop-prompt-filesize" class="text-[10px] font-mono text-slate-400 mt-0.5">0 KB</p>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <button id="btn-geedrop-decline" class="py-2.5 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 font-semibold rounded-xl text-sm transition-all cursor-pointer">
+            Decline
+          </button>
+          <button id="btn-geedrop-accept" class="py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white font-semibold rounded-xl text-sm shadow-lg shadow-emerald-600/10 active:scale-95 transition-all cursor-pointer">
+            Accept & Save
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- MAIN APP ENTRY MODULE -->
+    <script type="module" src="/main.js"></script>
+  </body>
+</html>
